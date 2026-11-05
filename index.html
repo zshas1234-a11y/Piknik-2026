@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,21 +10,23 @@
 <style>
 *{box-sizing:border-box}
 body{
- margin:0;background:#f3f6fa;color:#172033;
+ margin:0;background:#f1f5f9;color:#172033;
  font-family:Arial,sans-serif
 }
 header{
  background:#153c59;color:white;text-align:center;
  padding:30px 12px
 }
-header h1{font-size:24px;margin:0 0 9px}
+header h1{font-size:24px;margin:0 0 10px}
 header p{margin:6px}
-.fee{font-size:30px;font-weight:bold;margin-top:15px}
-.container{max-width:950px;margin:22px auto;padding:0 13px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.fee{font-size:32px;font-weight:bold;margin-top:15px}
+.container{max-width:1000px;margin:22px auto;padding:0 12px}
+.stats{
+ display:grid;grid-template-columns:repeat(3,1fr);gap:10px
+}
 .stat,.panel{
  background:white;padding:16px;border-radius:12px;
- box-shadow:0 2px 9px #0000000b
+ box-shadow:0 2px 9px #0000000c
 }
 .stat{text-align:center}
 .stat strong{display:block;font-size:22px;margin-bottom:6px}
@@ -33,61 +34,53 @@ header p{margin:6px}
 .panel{margin-top:17px}
 h2{font-size:19px}
 input,textarea{
- width:100%;padding:12px;margin:7px 0;
+ width:100%;padding:11px;margin:5px 0;
  border:1px solid #cbd5e1;border-radius:7px;
- font-size:15px;font-family:Arial
+ font-size:14px
 }
-textarea{min-height:180px;resize:vertical}
+textarea{min-height:150px;resize:vertical}
 button{
- padding:12px;border:0;border-radius:7px;
+ padding:10px;border:0;border-radius:7px;
  background:#153c59;color:white;font-weight:bold;
  cursor:pointer
 }
 .full{width:100%;margin:6px 0}
 .danger{background:#dc3545}
 .grey{background:#64748b}
+.green{background:#16834a}
 .table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:430px}
+table{width:100%;border-collapse:collapse;min-width:520px}
 th,td{
- padding:12px 9px;text-align:left;
+ padding:11px 8px;text-align:left;
  border-bottom:1px solid #e2e8f0;font-size:13px
 }
 th{background:#f8fafc}
 .paid{color:#15803d;font-weight:bold}
 .partial{color:#b45309;font-weight:bold}
 .unpaid{color:#dc2626;font-weight:bold}
-.editor{
- border:1px solid #e2e8f0;padding:12px;
- border-radius:9px;margin:10px 0
+.admin-table input{
+ width:95px;padding:9px;margin:0
 }
-.editor input{margin:4px 0}
+.admin-table button{padding:9px;font-size:12px}
 .small{font-size:12px;color:#64748b}
-footer{text-align:center;padding:22px;color:#64748b;font-size:12px}
-
-/* Small hidden admin lock */
+#adminPanel{display:none}
+#message{font-size:13px;overflow-wrap:anywhere}
+footer{text-align:center;padding:20px;color:#64748b;font-size:12px}
 .lock-area{text-align:center;padding:12px 0 22px}
 .lock-button{
  width:38px;height:38px;border-radius:50%;
- background:#e2e8f0;color:#334155;
- font-size:18px;padding:0
+ background:#e2e8f0;color:#334155;font-size:18px;
+ padding:0
 }
-
-/* Login popup */
 .modal{
- display:none;position:fixed;inset:0;
- background:#0009;z-index:10;
- align-items:center;justify-content:center;padding:15px
+ display:none;position:fixed;inset:0;background:#0009;
+ z-index:10;align-items:center;justify-content:center;padding:15px
 }
 .modal-box{
  background:white;width:100%;max-width:380px;
- padding:23px;border-radius:14px
+ padding:22px;border-radius:14px
 }
-.modal-box h2{margin-top:0}
-.close{
- background:#64748b;width:100%;margin-top:7px
-}
-#adminPanel{display:none}
-.message{font-size:13px;overflow-wrap:anywhere}
+.close{width:100%;background:#64748b;margin-top:7px}
 @media(max-width:550px){
  .stats{grid-template-columns:repeat(2,1fr)}
  header h1{font-size:21px}
@@ -134,9 +127,11 @@ footer{text-align:center;padding:22px;color:#64748b;font-size:12px}
   </div>
  </div>
 
+ <!-- PUBLIC STUDENT LIST -->
  <div class="panel">
   <h2>Student Payment List</h2>
-  <input id="search" placeholder="Search student name..." oninput="renderStudents()">
+  <input id="search" placeholder="Search student name..."
+   oninput="renderPublicList()">
 
   <div class="table-wrap">
    <table>
@@ -148,42 +143,61 @@ footer{text-align:center;padding:22px;color:#64748b;font-size:12px}
       <th>Status</th>
      </tr>
     </thead>
-    <tbody id="studentList">
-     <tr><td colspan="4">Loading students...</td></tr>
+    <tbody id="publicList">
+     <tr><td colspan="4">Loading...</td></tr>
     </tbody>
    </table>
   </div>
-  <p class="small">Live Picnic Fee Collection Record</p>
  </div>
 
- <!-- ADMIN DASHBOARD -->
+ <!-- ADMIN PANEL -->
  <div class="panel" id="adminPanel">
 
   <h2>Admin Dashboard</h2>
 
-  <h3>Bulk Add Students</h3>
+  <h3>Add Multiple Students</h3>
   <p class="small">
-   Paste all 43 student names together. Enter one name per line.
+   Paste all student names below. Write one name per line.
   </p>
 
   <textarea id="bulkNames"
-   placeholder="Ali&#10;Ahmed&#10;Usman&#10;Hamza&#10;Enter more student names..."></textarea>
+   placeholder="Ali&#10;Ahmed&#10;Usman&#10;Hamza&#10;More student names..."></textarea>
 
-  <button class="full" onclick="bulkAdd()">
+  <button class="full green" onclick="bulkAdd()">
    + Add All Students
   </button>
 
-  <p class="small">Duplicate names will be skipped only if they match existing names exactly (case-insensitive).</p>
+  <hr>
 
-  <h3>Manage Payments</h3>
+  <h3>Student Payment Management</h3>
+  <p class="small">
+   Enter payment directly in front of each student and press Save.
+  </p>
+
   <input id="adminSearch"
-   placeholder="Search student to edit..."
-   oninput="renderAdmin()">
+   placeholder="Search student..."
+   oninput="renderAdminList()">
 
-  <div id="adminList"></div>
+  <div class="table-wrap">
+   <table class="admin-table">
+    <thead>
+     <tr>
+      <th>#</th>
+      <th>Student Name</th>
+      <th>Payment (Rs.)</th>
+      <th>Action</th>
+      <th>Delete</th>
+     </tr>
+    </thead>
+    <tbody id="adminList"></tbody>
+   </table>
+  </div>
+
+  <p class="small">Fee per student: Rs. 1,500</p>
 
   <button class="full grey" onclick="logout()">Logout Admin</button>
-  <p class="message" id="adminMessage"></p>
+  <p id="message"></p>
+
  </div>
 
 </div>
@@ -192,35 +206,31 @@ footer{text-align:center;padding:22px;color:#64748b;font-size:12px}
  Class 10th Picnic 2026 | Maymar-e-Nau School
 </footer>
 
-<!-- SMALL LOCK BUTTON -->
+<!-- HIDDEN LOCK -->
 <div class="lock-area">
- <button class="lock-button" onclick="openLogin()" title="Admin Login">
-  🔒
- </button>
+ <button class="lock-button" onclick="openLogin()">🔒</button>
 </div>
 
-<!-- LOGIN MODAL -->
+<!-- LOGIN POPUP -->
 <div class="modal" id="loginModal">
  <div class="modal-box">
-  <h2>🔐 Admin Login</h2>
-  <p class="small">Only authorized admin can access this panel.</p>
+  <h2>Admin Login</h2>
+  <p class="small">Authorized Admin Only</p>
 
   <form onsubmit="event.preventDefault();login();">
-   <input type="email" id="email"
-    placeholder="Admin Email" required>
-   <input type="password" id="password"
-    placeholder="Admin Password" required>
+   <input type="email" id="email" placeholder="Admin Email" required>
+   <input type="password" id="password" placeholder="Password" required>
    <button class="full" type="submit">Login</button>
   </form>
 
   <button class="close" onclick="closeLogin()">Cancel</button>
-  <p class="message" id="loginMessage"></p>
+  <p id="loginMessage"></p>
  </div>
 </div>
 
 <script>
 
-// SUPABASE SETTINGS
+// SUPABASE CONFIGURATION
 const SUPABASE_URL =
 "https://ycjnzxkycbriqkeunvez.supabase.co";
 
@@ -237,16 +247,15 @@ const db=window.supabase.createClient(
 let students=[];
 let isAdmin=false;
 
-// MESSAGES
-function msg(text){
- document.getElementById("adminMessage").textContent=text;
+// MESSAGE
+function msg(t){
+ document.getElementById("message").textContent=t;
 }
 
-// OPEN LOGIN
+// LOGIN POPUP
 function openLogin(){
  document.getElementById("loginModal").style.display="flex";
 }
-
 function closeLogin(){
  document.getElementById("loginModal").style.display="none";
 }
@@ -258,7 +267,7 @@ function getStatus(amount){
  return "Unpaid";
 }
 
-// LOAD DATABASE
+// LOAD STUDENTS
 async function loadStudents(){
  const {data,error}=await db
   .from("students")
@@ -266,15 +275,15 @@ async function loadStudents(){
   .order("name");
 
  if(error){
-  msg("Database error: "+error.message);
+  if(isAdmin)msg(error.message);
   return;
  }
 
  students=data||[];
- renderStudents();
  updateStats();
+ renderPublicList();
 
- if(isAdmin)renderAdmin();
+ if(isAdmin)renderAdminList();
 }
 
 // STATISTICS
@@ -282,7 +291,7 @@ function updateStats(){
  const total=students.length;
  const paid=students.filter(s=>s.paid_amount>=1500).length;
  const partial=students.filter(s=>s.paid_amount>0&&s.paid_amount<1500).length;
- const collection=students.reduce((sum,s)=>sum+s.paid_amount,0);
+ const collection=students.reduce((a,s)=>a+s.paid_amount,0);
 
  document.getElementById("totalStudents").textContent=total;
  document.getElementById("paidStudents").textContent=paid;
@@ -296,9 +305,9 @@ function updateStats(){
   "Rs. "+Math.max(0,total*1500-collection).toLocaleString();
 }
 
-// PUBLIC STUDENT LIST
-function renderStudents(){
- const list=document.getElementById("studentList");
+// PUBLIC LIST
+function renderPublicList(){
+ const list=document.getElementById("publicList");
  const search=document.getElementById("search").value.toLowerCase();
 
  list.replaceChildren();
@@ -307,6 +316,21 @@ function renderStudents(){
   s.name.toLowerCase().includes(search)
  );
 
+ filtered.forEach((s,i)=>{
+  const tr=document.createElement("tr");
+  const status=getStatus(s.paid_amount);
+
+  [i+1,s.name,"Rs. "+s.paid_amount.toLocaleString(),status]
+   .forEach((v,index)=>{
+    const td=document.createElement("td");
+    td.textContent=v;
+    if(index===3)td.className=status.toLowerCase();
+    tr.appendChild(td);
+   });
+
+  list.appendChild(tr);
+ });
+
  if(!filtered.length){
   const tr=document.createElement("tr");
   const td=document.createElement("td");
@@ -314,53 +338,37 @@ function renderStudents(){
   td.textContent="No students found.";
   tr.appendChild(td);
   list.appendChild(tr);
-  return;
  }
-
- filtered.forEach((s,i)=>{
-  const tr=document.createElement("tr");
-  const st=getStatus(s.paid_amount);
-
-  [i+1,s.name,"Rs. "+s.paid_amount.toLocaleString(),st]
-   .forEach((value,index)=>{
-    const td=document.createElement("td");
-    td.textContent=value;
-    if(index===3)td.className=st.toLowerCase();
-    tr.appendChild(td);
-   });
-
-  list.appendChild(tr);
- });
 }
 
 // ADMIN LOGIN
 async function login(){
  const email=document.getElementById("email").value.trim();
  const password=document.getElementById("password").value;
- const loginMessage=document.getElementById("loginMessage");
+ const out=document.getElementById("loginMessage");
 
- loginMessage.textContent="Logging in...";
+ out.textContent="Checking login...";
 
  const {data,error}=await db.auth.signInWithPassword({
   email,password
  });
 
  if(error){
-  loginMessage.textContent="Login failed: "+error.message;
+  out.textContent="Login failed: "+error.message;
   return;
  }
 
  if(data.user.id!==ADMIN_UID){
   await db.auth.signOut();
-  loginMessage.textContent="Access denied. Admin only.";
+  out.textContent="Admin access denied.";
   return;
  }
 
  isAdmin=true;
  closeLogin();
 
- document.getElementById("adminPanel").style.display="block";
  document.getElementById("password").value="";
+ document.getElementById("adminPanel").style.display="block";
 
  await loadStudents();
 
@@ -369,18 +377,18 @@ async function login(){
  });
 }
 
-// BULK ADD ALL NAMES
+// BULK ADD
 async function bulkAdd(){
  if(!isAdmin)return;
 
  const input=document.getElementById("bulkNames");
- const names=input.value
-  .split(/\r?\n/)
+
+ const names=input.value.split(/\r?\n/)
   .map(n=>n.trim())
   .filter(n=>n.length>0);
 
- if(names.length===0){
-  msg("Please enter student names first.");
+ if(!names.length){
+  msg("Please paste student names.");
   return;
  }
 
@@ -399,15 +407,15 @@ async function bulkAdd(){
   }
  });
 
- if(unique.length===0){
-  msg("All these names already exist.");
+ if(!unique.length){
+  msg("These students are already added.");
   return;
  }
 
  const {error}=await db.from("students").insert(unique);
 
  if(error){
-  msg("Bulk add error: "+error.message);
+  msg("Add error: "+error.message);
   return;
  }
 
@@ -417,52 +425,74 @@ async function bulkAdd(){
  await loadStudents();
 }
 
-// ADMIN STUDENT EDITOR
-function renderAdmin(){
- const box=document.getElementById("adminList");
+// ADMIN PAYMENT TABLE
+function renderAdminList(){
+ const list=document.getElementById("adminList");
  const search=document.getElementById("adminSearch").value.toLowerCase();
 
- box.replaceChildren();
-
- if(!isAdmin)return;
+ list.replaceChildren();
 
  const filtered=students.filter(s=>
   s.name.toLowerCase().includes(search)
  );
 
- filtered.forEach(s=>{
-  const wrap=document.createElement("div");
-  wrap.className="editor";
+ filtered.forEach((s,i)=>{
+  const tr=document.createElement("tr");
 
-  const name=document.createElement("input");
-  name.value=s.name;
-  name.placeholder="Student Name";
+  // Number
+  const number=document.createElement("td");
+  number.textContent=i+1;
 
-  const amount=document.createElement("input");
-  amount.type="number";
-  amount.min="0";
-  amount.max="1500";
-  amount.step="1";
-  amount.value=s.paid_amount;
-  amount.placeholder="Paid Amount";
+  // Student name input
+  const nameCell=document.createElement("td");
+  const nameInput=document.createElement("input");
+  nameInput.value=s.name;
+  nameInput.setAttribute("aria-label","Student name");
+  nameCell.appendChild(nameInput);
 
+  // Payment input
+  const payCell=document.createElement("td");
+  const payInput=document.createElement("input");
+  payInput.type="number";
+  payInput.min="0";
+  payInput.max="1500";
+  payInput.step="1";
+  payInput.value=s.paid_amount;
+  payInput.setAttribute("aria-label","Payment amount");
+  payCell.appendChild(payInput);
+
+  // Save button
+  const actionCell=document.createElement("td");
   const save=document.createElement("button");
-  save.className="full";
-  save.textContent="Save Name & Payment";
-  save.onclick=()=>updateStudent(s.id,name.value,amount.value);
+  save.className="green";
+  save.textContent="Save";
+  save.onclick=()=>saveStudent(s.id,nameInput.value,payInput.value);
+  actionCell.appendChild(save);
 
+  // Delete button
+  const deleteCell=document.createElement("td");
   const del=document.createElement("button");
-  del.className="full danger";
-  del.textContent="Delete Student";
+  del.className="danger";
+  del.textContent="Delete";
   del.onclick=()=>deleteStudent(s.id);
+  deleteCell.appendChild(del);
 
-  wrap.append(name,amount,save,del);
-  box.appendChild(wrap);
+  tr.append(number,nameCell,payCell,actionCell,deleteCell);
+  list.appendChild(tr);
  });
+
+ if(!filtered.length){
+  const tr=document.createElement("tr");
+  const td=document.createElement("td");
+  td.colSpan=5;
+  td.textContent="No students found.";
+  tr.appendChild(td);
+  list.appendChild(tr);
+ }
 }
 
-// UPDATE STUDENT
-async function updateStudent(id,name,value){
+// SAVE NAME AND PAYMENT
+async function saveStudent(id,name,value){
  if(!isAdmin)return;
 
  name=name.trim();
@@ -479,15 +509,18 @@ async function updateStudent(id,name,value){
  }
 
  const {error}=await db.from("students")
-  .update({name:name,paid_amount:amount})
+  .update({
+   name:name,
+   paid_amount:amount
+  })
   .eq("id",id);
 
  if(error){
-  msg("Update failed: "+error.message);
+  msg("Save failed: "+error.message);
   return;
  }
 
- msg("Student payment updated successfully!");
+ msg("Payment saved successfully!");
  await loadStudents();
 }
 
@@ -495,7 +528,7 @@ async function updateStudent(id,name,value){
 async function deleteStudent(id){
  if(!isAdmin)return;
 
- if(!confirm("Are you sure you want to delete this student?"))return;
+ if(!confirm("Delete this student?"))return;
 
  const {error}=await db.from("students")
   .delete()
@@ -506,25 +539,24 @@ async function deleteStudent(id){
   return;
  }
 
- msg("Student deleted successfully.");
+ msg("Student deleted.");
  await loadStudents();
 }
 
 // LOGOUT
 async function logout(){
  await db.auth.signOut();
- isAdmin=false;
 
+ isAdmin=false;
  document.getElementById("adminPanel").style.display="none";
  document.getElementById("adminSearch").value="";
- document.getElementById("search").value="";
+ document.getElementById("bulkNames").value="";
 
- renderStudents();
- msg("Logged out successfully.");
+ msg("");
  window.scrollTo({top:0,behavior:"smooth"});
 }
 
-// RESTORE LOGIN
+// RESTORE SESSION
 async function initialize(){
  const {data}=await db.auth.getUser();
 
@@ -535,7 +567,7 @@ async function initialize(){
 
  await loadStudents();
 
- // LIVE UPDATE
+ // LIVE UPDATES
  db.channel("picnic-live")
   .on("postgres_changes",{
    event:"*",
