@@ -1,0 +1,439 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class 10th Picnic 2026</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f1f5f9;
+  color:#172033;
+}
+header{
+  background:#153c59;
+  color:white;
+  text-align:center;
+  padding:30px 15px;
+}
+header h1{margin:0 0 10px;font-size:25px}
+header p{margin:5px}
+.fee{
+  font-size:30px;
+  font-weight:bold;
+  margin-top:15px;
+}
+.container{
+  max-width:850px;
+  margin:22px auto;
+  padding:0 14px;
+}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.stat,.panel{
+  background:white;
+  padding:17px;
+  border-radius:12px;
+  box-shadow:0 2px 8px #0000000c;
+}
+.stat{text-align:center}
+.stat strong{
+  display:block;
+  font-size:23px;
+  margin-bottom:5px;
+}
+.stat span{font-size:12px;color:#64748b}
+.panel{margin-top:18px}
+h2{font-size:19px;margin-top:0}
+input,button{
+  width:100%;
+  padding:12px;
+  margin:6px 0;
+  border-radius:7px;
+  border:1px solid #cbd5e1;
+  font-size:15px;
+}
+button{
+  background:#153c59;
+  color:white;
+  border:0;
+  cursor:pointer;
+  font-weight:bold;
+}
+button.delete{background:#dc3545}
+button.logout{background:#64748b}
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:440px;
+}
+th,td{
+  text-align:left;
+  padding:12px 8px;
+  border-bottom:1px solid #e2e8f0;
+  font-size:13px;
+}
+th{background:#f8fafc}
+.table-wrap{overflow-x:auto}
+.paid{color:#15803d;font-weight:bold}
+.unpaid{color:#dc2626;font-weight:bold}
+.partial{color:#b45309;font-weight:bold}
+.admin{display:none}
+.small{font-size:12px;color:#64748b}
+#message{font-size:13px;color:#dc2626}
+footer{
+  text-align:center;
+  padding:25px;
+  color:#64748b;
+  font-size:12px;
+}
+@media(max-width:500px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  header h1{font-size:21px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>CLASS 10TH PICNIC 2026</h1>
+  <p>MAYMAR-E-NAU SCHOOL</p>
+  <p>PICNIC FEE COLLECTION</p>
+  <div class="fee">Rs. 1,500</div>
+  <p>Fee Per Student</p>
+</header>
+
+<div class="container">
+
+  <div class="stats">
+    <div class="stat">
+      <strong id="totalStudents">0</strong>
+      <span>Total Students</span>
+    </div>
+    <div class="stat">
+      <strong id="paidStudents">0</strong>
+      <span>Fully Paid</span>
+    </div>
+    <div class="stat">
+      <strong id="pendingStudents">0</strong>
+      <span>Pending</span>
+    </div>
+    <div class="stat">
+      <strong id="totalCollection">Rs. 0</strong>
+      <span>Total Collection</span>
+    </div>
+    <div class="stat">
+      <strong id="remaining">Rs. 0</strong>
+      <span>Remaining Amount</span>
+    </div>
+    <div class="stat">
+      <strong id="partialStudents">0</strong>
+      <span>Partial Payments</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Student Payment List</h2>
+    <input id="search" placeholder="Search student name..." oninput="renderStudents()">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Student Name</th>
+            <th>Paid Amount</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="studentList">
+          <tr><td colspan="4">Loading students...</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">Payment information is updated online.</p>
+  </div>
+
+  <div class="panel">
+    <h2>Admin Login</h2>
+    <div id="loginBox">
+      <input type="email" id="email" placeholder="Admin Email">
+      <input type="password" id="password" placeholder="Admin Password">
+      <button onclick="login()">Login as Admin</button>
+    </div>
+
+    <div id="adminPanel" class="admin">
+      <h2>Admin Dashboard</h2>
+      <p class="small">You are logged in as Admin.</p>
+
+      <input id="studentName" placeholder="Enter Student Name">
+      <button onclick="addStudent()">Add Student</button>
+
+      <h3>Edit Student Payments</h3>
+      <div id="adminList"></div>
+
+      <button class="logout" onclick="logout()">Logout</button>
+    </div>
+
+    <p id="message"></p>
+  </div>
+
+</div>
+
+<footer>
+  Class 10th Picnic 2026 | Maymar-e-Nau School
+</footer>
+
+<script>
+// SUPABASE SETTINGS
+const SUPABASE_URL = "YOUR-PROJECT-URL";
+const SUPABASE_KEY = "YOUR-ANON-PUBLIC-KEY";
+
+// YOUR ADMIN USER UUID
+const ADMIN_UID = "YOUR-ADMIN-UUID";
+
+const db = supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+let students = [];
+let isAdmin = false;
+
+function message(text){
+  document.getElementById("message").textContent=text;
+}
+
+function getStatus(amount){
+  if(amount >= 1500) return "Paid";
+  if(amount > 0) return "Partial";
+  return "Unpaid";
+}
+
+async function loadStudents(){
+  const {data,error}=await db
+    .from("students")
+    .select("*")
+    .order("name");
+
+  if(error){
+    message("Unable to load data: "+error.message);
+    return;
+  }
+
+  students=data || [];
+  renderStudents();
+  renderAdmin();
+  updateStats();
+}
+
+function updateStats(){
+  const total=students.length;
+  const paid=students.filter(s=>s.paid_amount>=1500).length;
+  const partial=students.filter(s=>s.paid_amount>0 && s.paid_amount<1500).length;
+  const collection=students.reduce((sum,s)=>sum+s.paid_amount,0);
+
+  document.getElementById("totalStudents").textContent=total;
+  document.getElementById("paidStudents").textContent=paid;
+  document.getElementById("pendingStudents").textContent=total-paid;
+  document.getElementById("partialStudents").textContent=partial;
+  document.getElementById("totalCollection").textContent="Rs. "+collection.toLocaleString();
+  document.getElementById("remaining").textContent=
+    "Rs. "+(total*1500-collection).toLocaleString();
+}
+
+function renderStudents(){
+  const list=document.getElementById("studentList");
+  const search=document.getElementById("search").value.toLowerCase();
+
+  list.replaceChildren();
+
+  const filtered=students.filter(s=>s.name.toLowerCase().includes(search));
+
+  if(filtered.length===0){
+    const tr=document.createElement("tr");
+    const td=document.createElement("td");
+    td.colSpan=4;
+    td.textContent="No students found.";
+    tr.appendChild(td);
+    list.appendChild(tr);
+    return;
+  }
+
+  filtered.forEach((s,i)=>{
+    const tr=document.createElement("tr");
+    const status=getStatus(s.paid_amount);
+    const values=[i+1,s.name,"Rs. "+s.paid_amount.toLocaleString(),status];
+
+    values.forEach((v,index)=>{
+      const td=document.createElement("td");
+      td.textContent=v;
+      if(index===3){
+        td.className=status.toLowerCase();
+      }
+      tr.appendChild(td);
+    });
+    list.appendChild(tr);
+  });
+}
+
+function renderAdmin(){
+  const box=document.getElementById("adminList");
+  box.replaceChildren();
+
+  if(!isAdmin)return;
+
+  students.forEach(s=>{
+    const wrap=document.createElement("div");
+    wrap.style.cssText="border:1px solid #ddd;padding:12px;margin:10px 0;border-radius:8px";
+
+    const name=document.createElement("p");
+    name.textContent=s.name;
+    name.style.fontWeight="bold";
+
+    const amount=document.createElement("input");
+    amount.type="number";
+    amount.min="0";
+    amount.max="1500";
+    amount.value=s.paid_amount;
+    amount.placeholder="Paid amount";
+
+    const save=document.createElement("button");
+    save.textContent="Save Changes";
+    save.onclick=()=>updateStudent(s.id,amount.value);
+
+    const del=document.createElement("button");
+    del.textContent="Delete Student";
+    del.className="delete";
+    del.onclick=()=>deleteStudent(s.id);
+
+    wrap.append(name,amount,save,del);
+    box.appendChild(wrap);
+  });
+}
+
+async function login(){
+  const email=document.getElementById("email").value;
+  const password=document.getElementById("password").value;
+
+  const {data,error}=await db.auth.signInWithPassword({email,password});
+
+  if(error){
+    message("Login failed. Check your email and password.");
+    return;
+  }
+
+  if(data.user.id!==ADMIN_UID){
+    await db.auth.signOut();
+    message("Access denied. You are not the admin.");
+    return;
+  }
+
+  isAdmin=true;
+  document.getElementById("loginBox").style.display="none";
+  document.getElementById("adminPanel").style.display="block";
+  message("Admin login successful.");
+  renderAdmin();
+}
+
+async function logout(){
+  await db.auth.signOut();
+  isAdmin=false;
+  document.getElementById("loginBox").style.display="block";
+  document.getElementById("adminPanel").style.display="none";
+  message("Logged out.");
+}
+
+async function addStudent(){
+  const name=document.getElementById("studentName").value.trim();
+
+  if(!name){
+    message("Please enter a student name.");
+    return;
+  }
+
+  const {error}=await db.from("students").insert({
+    name:name,
+    paid_amount:0
+  });
+
+  if(error){
+    message(error.message);
+    return;
+  }
+
+  document.getElementById("studentName").value="";
+  message("Student added successfully.");
+  await loadStudents();
+}
+
+async function updateStudent(id,value){
+  const amount=Number(value);
+
+  if(!Number.isInteger(amount)||amount<0||amount>1500){
+    message("Enter an amount between 0 and 1500.");
+    return;
+  }
+
+  const {error}=await db.from("students")
+    .update({paid_amount:amount})
+    .eq("id",id);
+
+  if(error){
+    message(error.message);
+    return;
+  }
+
+  message("Payment updated successfully.");
+  await loadStudents();
+}
+
+async function deleteStudent(id){
+  if(!confirm("Are you sure you want to delete this student?"))return;
+
+  const {error}=await db.from("students")
+    .delete()
+    .eq("id",id);
+
+  if(error){
+    message(error.message);
+    return;
+  }
+
+  message("Student deleted.");
+  await loadStudents();
+}
+
+// Restore admin session after page refresh
+async function initialize(){
+  const {data}=await db.auth.getUser();
+
+  if(data.user && data.user.id===ADMIN_UID){
+    isAdmin=true;
+    document.getElementById("loginBox").style.display="none";
+    document.getElementById("adminPanel").style.display="block";
+  }
+
+  await loadStudents();
+
+  // Automatically refresh list for everyone
+  db.channel("student-changes")
+    .on("postgres_changes",{
+      event:"*",
+      schema:"public",
+      table:"students"
+    },loadStudents)
+    .subscribe();
+}
+
+initialize();
+</script>
+
+</body>
+</html>
