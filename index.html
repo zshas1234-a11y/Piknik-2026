@@ -75,8 +75,28 @@ table{width:100%;border-collapse:collapse;min-width:520px}th,td{text-align:left;
 .table-wrap{border-radius:14px}
 tbody tr{transition:background .18s}
 tbody tr:hover{background:#f2faff}
-td .remaining{font-weight:850;color:#315b76}
 @media(max-width:520px){.countdown{gap:7px}.count-box{padding:11px 4px}.count-box strong{font-size:25px}.deadline-card{padding:19px}.hero-orb.one{left:-45px}.hero-orb.two{right:-30px}}
+
+
+.student-name,.student-name strong,.name-highlight{
+  display:inline-flex;align-items:center;position:relative;
+  padding:9px 13px;border-radius:12px;
+  color:#12385b;font-weight:950;letter-spacing:.15px;
+  background:linear-gradient(145deg,#ffffff 0%,#eaf6ff 48%,#d5eaff 100%);
+  border:1px solid rgba(85,157,208,.42);
+  box-shadow:0 4px 0 #b8d4e9,0 8px 15px rgba(25,83,125,.13),
+             inset 0 1px 0 rgba(255,255,255,.98),
+             inset 0 -2px 4px rgba(74,137,184,.12);
+  text-shadow:0 1px 0 #fff;
+  transform:translateY(-1px);
+  transition:transform .2s ease,box-shadow .2s ease,filter .2s ease;
+}
+.student-name:hover,.student-name strong:hover,.name-highlight:hover{
+  transform:translateY(-3px);
+  box-shadow:0 6px 0 #a9c9e2,0 13px 20px rgba(25,83,125,.2),
+             inset 0 1px 0 rgba(255,255,255,.98);
+  filter:saturate(1.08);
+}
 
 </style>
 </head>
@@ -147,7 +167,7 @@ td .remaining{font-weight:850;color:#315b76}
   </section>
   <section class="panel" id="studentList">
     <div class="panel-head"><div><h2>Student Payment List</h2><div class="small" style="margin-top:5px">Student name, amount paid and remaining fee.</div><div class="student-summary" id="studentSummary" style="margin-top:7px">Loading student count…</div></div><input id="search" class="search" placeholder="Search student name…" /></div>
-    <div class="table-wrap"><table><thead><tr><th>#</th><th>Student Name</th><th>Paid Amount</th><th>Remaining</th><th>Status</th></tr></thead><tbody id="studentRows"><tr><td colspan="5">Loading students…</td></tr></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th>#</th><th>Student Name</th><th>Paid Amount</th><th>Status</th></tr></thead><tbody id="studentRows"><tr><td colspan="4">Loading students…</td></tr></tbody></table></div>
   </section>
   <p class="small" style="text-align:center;margin-top:18px">CLASS 10TH PICNIC 2026 • Maymar-E-Nau School</p>
 </main>
@@ -205,7 +225,7 @@ function applyBackground(url){
 }
 async function loadStudents(){
   const {data,error}=await db.from("students").select("id,name,paid_amount").order("name");
-  if(error){el("studentRows").innerHTML=`<tr><td colspan="5">Could not load students: ${escapeHtml(error.message)}</td></tr>`;return;}
+  if(error){el("studentRows").innerHTML=`<tr><td colspan="4">Could not load students: ${escapeHtml(error.message)}</td></tr>`;return;}
   students=data||[];render();
 }
 function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
@@ -227,10 +247,10 @@ function render(){
   const q=el("search").value.toLowerCase();
   const shown=students.filter(s=>String(s.name||"").toLowerCase().includes(q));
   el("studentRows").innerHTML=shown.length?shown.map((s,i)=>{
-    const paid=Number(s.paid_amount)||0, remaining=Math.max(0,FEE-paid), status=paid>=FEE?"Fully Paid":paid>0?"Partial Payment":"Pending";
+    const paid=Number(s.paid_amount)||0, status=paid>=FEE?"Fully Paid":paid>0?"Partial Payment":"Pending";
     const cls=paid>=FEE?"paid":paid>0?"partial":"pending";
-    return `<tr><td>${i+1}</td><td><strong>${escapeHtml(s.name)}</strong></td><td>${money(paid)}</td><td><span class="remaining">${money(remaining)}</span></td><td><span class="status ${cls}">${status}</span></td></tr>`;
-  }).join(""):`<tr><td colspan="5">No students found.</td></tr>`;
+    return `<tr><td>${i+1}</td><td><strong>${escapeHtml(s.name)}</strong></td><td>${money(paid)}</td><td><span class="status ${cls}">${status}</span></td></tr>`;
+  }).join(""):`<tr><td colspan="4">No students found.</td></tr>`;
   const select=el("editStudent"), old=select.value;
   select.innerHTML='<option value="">Select student</option>'+students.map(s=>`<option value="${escapeHtml(s.id)}">${escapeHtml(s.name)}</option>`).join("");
   if(students.some(s=>String(s.id)===old))select.value=old;
