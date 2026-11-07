@@ -9,7 +9,7 @@
 :root{--navy:#102f4d;--blue:#087c9d;--cyan:#12b7c9;--ink:#183650;--muted:#6b7d90;--bg:#edf4f8;--white:#fff;--shadow:0 14px 35px rgba(15,54,80,.13)}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 12% 8%,#d9f7fb 0,transparent 30%),radial-gradient(ellipse at 92% 30%,#dce9fb 0,transparent 28%),linear-gradient(145deg,#edf5fa,#e8f0f7 55%,#f4f8fb);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:var(--ink);background-attachment:fixed}
 .page{max-width:1180px;margin:auto;padding:0 18px 55px}
-.hero{min-height:clamp(470px,78svh,650px);margin:0 -18px 25px;padding:54px 22px 92px;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;border-radius:0 0 34px 34px;color:white;background:linear-gradient(135deg,rgba(5,31,54,.48),rgba(0,105,135,.36)),url('') center 35%/cover no-repeat;box-shadow:0 18px 38px rgba(4,44,69,.22)}
+.hero{min-height:clamp(470px,78svh,650px);margin:0 -18px 25px;padding:54px 22px 92px;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;border-radius:0 0 34px 34px;color:white;background:linear-gradient(135deg,rgba(5,22,45,.68),rgba(0,105,135,.42)),url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2000&q=85') center 45%/cover no-repeat;box-shadow:0 18px 38px rgba(4,44,69,.22)}
 .hero:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 15% 15%,rgba(255,255,255,.19),transparent 35%),linear-gradient(0deg,rgba(4,35,58,.34),transparent 72%);pointer-events:none}.hero:before{content:"";position:absolute;inset:12px;border:1px solid rgba(255,255,255,.18);border-radius:26px;z-index:1;pointer-events:none;box-shadow:inset 0 1px 18px rgba(255,255,255,.08)}
 .hero-content{position:relative;z-index:1;max-width:850px;text-shadow:0 2px 14px rgba(0,0,0,.55)}
 .school{font-size:clamp(15px,2.2vw,21px);font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#d7f8ff;margin-bottom:15px}
@@ -46,15 +46,48 @@ table{width:100%;border-collapse:collapse;min-width:520px}th,td{text-align:left;
 .modal{display:none;position:fixed;inset:0;background:rgba(5,24,40,.6);z-index:20;align-items:center;justify-content:center;padding:16px}.modal.show{display:flex}.modal-card{width:min(520px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:22px;padding:22px;box-shadow:0 25px 70px rgba(0,0,0,.3)}.modal-card h2{margin:0 0 15px}.field{display:block;width:100%;padding:12px;border:1px solid #d7e2eb;border-radius:11px;margin:8px 0 12px;font:inherit}.btn{border:0;border-radius:11px;padding:11px 15px;background:linear-gradient(120deg,#087c9d,#12aabd);color:white;font-weight:800;cursor:pointer}.btn.secondary{background:#eaf2f7;color:#21445e}.btn.danger{background:#c94d4d}.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.small{font-size:12px;color:#75879a;line-height:1.5}.admin-section{border-top:1px solid #e7eef3;margin-top:18px;padding-top:16px}.hidden{display:none!important}.notice{padding:11px 13px;border-radius:11px;background:#eaf7fb;color:#20556b;font-size:13px;margin:10px 0}.error{background:#fff0ef;color:#a33730}.student-row-actions{white-space:nowrap}.student-row-actions button{padding:6px 9px;font-size:12px;margin:2px}
 @media(max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.stat{padding:18px 15px;min-height:120px}.hero{min-height:clamp(490px,82svh,620px);padding:48px 18px 55px;background-position:center 35%}.page{padding-left:13px;padding-right:13px}.hero{margin-left:-13px;margin-right:-13px}.funds{padding:22px}.panel{padding:16px}}
 @media(max-width:390px){.stats{grid-template-columns:1fr 1fr}.stat .value{font-size:23px}.stat .label{font-size:11px}}
+
+.hero{isolation:isolate;animation:heroReveal 1s ease both}
+.hero:after{background:radial-gradient(circle at 15% 15%,rgba(255,255,255,.2),transparent 35%),linear-gradient(0deg,rgba(4,20,43,.48),transparent 72%),linear-gradient(115deg,transparent 20%,rgba(255,255,255,.10) 48%,transparent 72%);background-size:auto,auto,220% 100%;animation:heroShine 9s ease-in-out infinite}
+.hero-content{animation:heroContentIn 1s .12s ease both}
+@keyframes heroReveal{from{opacity:.65;transform:scale(1.025)}to{opacity:1;transform:scale(1)}}
+@keyframes heroContentIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes heroShine{0%,100%{background-position:center,center,-120% 0}50%{background-position:center,center,220% 0}}
+.hero-orb{position:absolute;border-radius:50%;pointer-events:none;z-index:0;filter:blur(1px);background:rgba(91,224,255,.13);box-shadow:0 0 65px rgba(91,224,255,.22);animation:orbFloat 8s ease-in-out infinite}
+.hero-orb.one{width:180px;height:180px;left:7%;top:12%}
+.hero-orb.two{width:110px;height:110px;right:9%;bottom:13%;animation-delay:-3s}
+@keyframes orbFloat{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(14px,-20px,0)}}
+.stat{transform-style:preserve-3d}
+.stat .value{text-shadow:0 2px 0 rgba(15,76,108,.08)}
+.progress-meta{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;position:relative;z-index:1;margin-top:17px;font-size:13px;font-weight:800;color:#e8fbff}
+.progress-wrap{height:13px;box-shadow:inset 0 2px 5px rgba(0,0,0,.16)}
+.progress{background:linear-gradient(90deg,#76f4d8,#d5fff5);box-shadow:0 0 16px rgba(117,240,213,.45)}
+.deadline-card{margin-top:22px;padding:22px;border-radius:24px;color:#fff;background:linear-gradient(125deg,#132c52,#244b78 58%,#087f9c);box-shadow:0 7px 0 rgba(12,38,74,.12),0 20px 40px rgba(14,48,82,.2);position:relative;overflow:hidden}
+.deadline-card:after{content:"";position:absolute;width:190px;height:190px;border:1px solid rgba(255,255,255,.16);border-radius:50%;right:-48px;top:-95px;box-shadow:0 0 0 24px rgba(255,255,255,.035),0 0 0 50px rgba(255,255,255,.025)}
+.deadline-kicker{font-size:11px;letter-spacing:1.6px;font-weight:900;color:#a9eefa}
+.deadline-card h2{font-size:21px;margin:7px 0 4px}
+.deadline-sub{font-size:13px;color:#d9edf8}
+.countdown{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:18px;max-width:540px;position:relative;z-index:1}
+.count-box{padding:13px 8px;text-align:center;border:1px solid rgba(255,255,255,.2);border-radius:15px;background:rgba(255,255,255,.10);backdrop-filter:blur(9px);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+.count-box strong{display:block;font-size:clamp(24px,4vw,34px);font-weight:950;line-height:1.1}
+.count-box span{display:block;margin-top:5px;font-size:10px;letter-spacing:1px;color:#c9e9f3;font-weight:800}
+.student-summary{font-size:12px;color:#72869a;font-weight:750}
+.table-wrap{border-radius:14px}
+tbody tr{transition:background .18s}
+tbody tr:hover{background:#f2faff}
+td .remaining{font-weight:850;color:#315b76}
+@media(max-width:520px){.countdown{gap:7px}.count-box{padding:11px 4px}.count-box strong{font-size:25px}.deadline-card{padding:19px}.hero-orb.one{left:-45px}.hero-orb.two{right:-30px}}
+
 </style>
 </head>
 <body>
 <div class="hero" id="hero">
+  <span class="hero-orb one"></span><span class="hero-orb two"></span>
   <div class="hero-content">
     <div class="school">MAYMAR-E-NAU SCHOOL</div>
     <h1>CLASS 10TH PICNIC 2026</h1>
     <p>OUR CLASS • OUR MEMORIES • OUR PICNIC</p>
-    <div class="fee">PICNIC FEE PER STUDENT: Rs. 1,500</div><a class="scroll-cue" href="#studentList"><span>SCROLL DOWN TO VIEW STUDENT LIST</span><span class="arrow">⌄</span></a>
+    <div class="fee">PICNIC FEE PER STUDENT: Rs. 1,500</div><div class="hero-date" style="margin-top:12px;font-size:13px;font-weight:800;color:#e8fbff;letter-spacing:.6px">PAYMENT DEADLINE: SATURDAY, 14 NOVEMBER • PICNIC: 15 NOVEMBER 2026</div><a class="scroll-cue" href="#studentList"><span>SCROLL DOWN TO VIEW STUDENT LIST</span><span class="arrow">⌄</span></a>
   </div>
 </div>
 <main class="page">
@@ -96,12 +129,25 @@ table{width:100%;border-collapse:collapse;min-width:520px}th,td{text-align:left;
     <h2>💰 Total Picnic Funds</h2>
     <div class="funds-total" id="totalFunds">Rs. 0</div>
     <div class="funds-note">Student Payments + Manual Collection + School Contribution</div>
+    <div class="progress-meta"><span>STUDENT FEE COLLECTION PROGRESS</span><strong id="progressPercent">0% collected</strong></div>
     <div class="progress-wrap"><div class="progress" id="progress"></div></div>
     <div class="funds-note" id="fundsBreakdown">Loading collection details…</div>
   </section>
+  <section class="deadline-card" aria-label="Payment deadline countdown">
+    <div class="deadline-kicker">FINAL PAYMENT DEADLINE</div>
+    <h2>Complete All Payments by Saturday</h2>
+    <div class="deadline-sub">Saturday, 14 November 2026 • Picnic Day: Sunday, 15 November 2026</div>
+    <div class="countdown" aria-live="polite">
+      <div class="count-box"><strong id="countDays">--</strong><span>DAYS</span></div>
+      <div class="count-box"><strong id="countHours">--</strong><span>HOURS</span></div>
+      <div class="count-box"><strong id="countMinutes">--</strong><span>MINUTES</span></div>
+      <div class="count-box"><strong id="countSeconds">--</strong><span>SECONDS</span></div>
+    </div>
+    <div class="deadline-sub" id="countdownMessage" style="margin-top:13px;font-weight:800">Time remaining to complete student payments</div>
+  </section>
   <section class="panel" id="studentList">
-    <div class="panel-head"><div><h2>Student Payment List</h2><div class="small" style="margin-top:5px">Every student name is highlighted for easy viewing.</div></div><input id="search" class="search" placeholder="Search student name…" /></div>
-    <div class="table-wrap"><table><thead><tr><th>#</th><th>Student Name</th><th>Paid Amount</th><th>Status</th></tr></thead><tbody id="studentRows"><tr><td colspan="4">Loading students…</td></tr></tbody></table></div>
+    <div class="panel-head"><div><h2>Student Payment List</h2><div class="small" style="margin-top:5px">Student name, amount paid and remaining fee.</div><div class="student-summary" id="studentSummary" style="margin-top:7px">Loading student count…</div></div><input id="search" class="search" placeholder="Search student name…" /></div>
+    <div class="table-wrap"><table><thead><tr><th>#</th><th>Student Name</th><th>Paid Amount</th><th>Remaining</th><th>Status</th></tr></thead><tbody id="studentRows"><tr><td colspan="5">Loading students…</td></tr></tbody></table></div>
   </section>
   <p class="small" style="text-align:center;margin-top:18px">CLASS 10TH PICNIC 2026 • Maymar-E-Nau School</p>
 </main>
@@ -159,7 +205,7 @@ function applyBackground(url){
 }
 async function loadStudents(){
   const {data,error}=await db.from("students").select("id,name,paid_amount").order("name");
-  if(error){el("studentRows").innerHTML=`<tr><td colspan="4">Could not load students: ${escapeHtml(error.message)}</td></tr>`;return;}
+  if(error){el("studentRows").innerHTML=`<tr><td colspan="5">Could not load students: ${escapeHtml(error.message)}</td></tr>`;return;}
   students=data||[];render();
 }
 function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
@@ -174,14 +220,17 @@ function render(){
   el("studentCollected").textContent=money(collected);el("studentRemaining").textContent=money(remaining);
   el("totalFunds").textContent=money(collected+manual+school);
   el("fundsBreakdown").textContent=`Students: ${money(collected)}  •  Manual: ${money(manual)}  •  School: ${money(school)}`;
-  el("progress").style.width=(total?Math.min(100,collected/(total*FEE)*100):0)+"%";
+  const progressPct=total?Math.min(100,collected/(total*FEE)*100):0;
+  el("progress").style.width=progressPct+"%";
+  el("progressPercent").textContent=progressPct.toFixed(1)+"% collected";
+  el("studentSummary").textContent=`SHOWING ${students.length} STUDENTS • FEE PER STUDENT: ${money(FEE)}`;
   const q=el("search").value.toLowerCase();
   const shown=students.filter(s=>String(s.name||"").toLowerCase().includes(q));
   el("studentRows").innerHTML=shown.length?shown.map((s,i)=>{
-    const paid=Number(s.paid_amount)||0, status=paid>=FEE?"Fully Paid":paid>0?"Partial Payment":"Pending";
+    const paid=Number(s.paid_amount)||0, remaining=Math.max(0,FEE-paid), status=paid>=FEE?"Fully Paid":paid>0?"Partial Payment":"Pending";
     const cls=paid>=FEE?"paid":paid>0?"partial":"pending";
-    return `<tr><td>${i+1}</td><td><strong>${escapeHtml(s.name)}</strong></td><td>${money(paid)}</td><td><span class="status ${cls}">${status}</span></td></tr>`;
-  }).join(""):`<tr><td colspan="4">No students found.</td></tr>`;
+    return `<tr><td>${i+1}</td><td><strong>${escapeHtml(s.name)}</strong></td><td>${money(paid)}</td><td><span class="remaining">${money(remaining)}</span></td><td><span class="status ${cls}">${status}</span></td></tr>`;
+  }).join(""):`<tr><td colspan="5">No students found.</td></tr>`;
   const select=el("editStudent"), old=select.value;
   select.innerHTML='<option value="">Select student</option>'+students.map(s=>`<option value="${escapeHtml(s.id)}">${escapeHtml(s.name)}</option>`).join("");
   if(students.some(s=>String(s.id)===old))select.value=old;
@@ -233,10 +282,32 @@ el("uploadBackground").onclick=async()=>{
   if(saveError){message("adminMsg","Image uploaded, but saving its URL failed: "+saveError.message,true);return;}
   settings.background_image=url;applyBackground(url);message("adminMsg","Header background updated successfully.");
 };
+
+function updateCountdown(){
+  const deadline = new Date("2026-11-14T23:59:59+05:00").getTime();
+  const now = Date.now();
+  let diff = deadline - now;
+  if(diff <= 0){
+    ["countDays","countHours","countMinutes","countSeconds"].forEach(id=>el(id).textContent="00");
+    el("countdownMessage").textContent = "Payment deadline has passed. Please contact the picnic management team.";
+    return;
+  }
+  const days=Math.floor(diff/86400000); diff%=86400000;
+  const hours=Math.floor(diff/3600000); diff%=3600000;
+  const minutes=Math.floor(diff/60000); diff%=60000;
+  const seconds=Math.floor(diff/1000);
+  el("countDays").textContent=String(days).padStart(2,"0");
+  el("countHours").textContent=String(hours).padStart(2,"0");
+  el("countMinutes").textContent=String(minutes).padStart(2,"0");
+  el("countSeconds").textContent=String(seconds).padStart(2,"0");
+  el("countdownMessage").textContent="Time remaining to complete all student payments";
+}
+
 async function init(){
   await loadSettings();await loadStudents();
   const {data}=await db.auth.getSession();isAdmin=!!data.session?.user&&data.session.user.id===ADMIN_UID;
 }
+updateCountdown();setInterval(updateCountdown,1000);
 init();
 </script>
 </body>
