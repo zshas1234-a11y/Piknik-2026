@@ -98,6 +98,18 @@ tbody tr:hover{background:#f2faff}
   filter:saturate(1.08);
 }
 
+
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:15px}
+.team-card{display:flex;align-items:center;gap:14px;min-width:0;padding:17px;border-radius:20px;background:linear-gradient(145deg,#fff,#edf7ff);border:1px solid rgba(104,160,198,.3);box-shadow:0 6px 0 #d6e6f1,0 13px 25px rgba(22,75,112,.10),inset 0 1px 0 #fff;transition:transform .2s ease,box-shadow .2s ease}
+.team-card:hover{transform:translateY(-4px);box-shadow:0 9px 0 #c6ddeb,0 18px 28px rgba(22,75,112,.16),inset 0 1px 0 #fff}
+.team-avatar{width:66px;height:66px;flex:0 0 66px;border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#fff;font-size:18px;font-weight:950;letter-spacing:.5px;background:linear-gradient(145deg,#0b789d,#153c68);border:3px solid #fff;box-shadow:0 0 0 2px #91c7df,0 6px 12px rgba(12,66,101,.2)}
+.team-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.team-info{min-width:0}
+.team-role{font-size:9px;letter-spacing:1px;font-weight:950;color:#16809c;margin-bottom:5px}
+.team-name{font-size:18px;line-height:1.2;font-weight:950;color:#153b5b;text-shadow:0 1px #fff}
+.team-desc{font-size:11px;line-height:1.45;color:#6c8092;margin-top:5px}
+@media(max-width:520px){.team-grid{grid-template-columns:1fr}.team-card{padding:14px}.team-avatar{width:60px;height:60px;flex-basis:60px}}
+
 </style>
 </head>
 <body>
@@ -117,21 +129,18 @@ tbody tr:hover{background:#f2faff}
       <h2>Picnic Management Team</h2>
       <span class="status paid">OFFICIAL TEAM</span>
     </div>
-    <div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(210px,1fr))">
-      <article class="stat">
-        <div class="label">Picnic In-charge</div>
-        <div class="value" style="font-size:22px">Masab Zahid</div>
-        <div class="hint">Picnic planning and coordination</div>
+    <div class="team-grid">
+      <article class="team-card">
+        <div class="team-avatar" id="teamAvatarMasab"><span>MZ</span></div>
+        <div class="team-info"><div class="team-role">PICNIC IN-CHARGE</div><div class="team-name">Masab Zahid</div><div class="team-desc">Picnic planning and coordination</div></div>
       </article>
-      <article class="stat">
-        <div class="label">Picnic In-charge</div>
-        <div class="value" style="font-size:22px">Waqas Saeed</div>
-        <div class="hint">Picnic planning and coordination</div>
+      <article class="team-card">
+        <div class="team-avatar" id="teamAvatarWaqas"><span>WS</span></div>
+        <div class="team-info"><div class="team-role">PICNIC IN-CHARGE</div><div class="team-name">Waqas Saeed</div><div class="team-desc">Picnic planning and coordination</div></div>
       </article>
-      <article class="stat">
-        <div class="label">Picnic Treasurer &amp; Finance In-charge</div>
-        <div class="value" style="font-size:22px">Zohaib Azeem</div>
-        <div class="hint">Responsible for collecting and keeping the picnic funds</div>
+      <article class="team-card">
+        <div class="team-avatar" id="teamAvatarZohaib"><span>ZA</span></div>
+        <div class="team-info"><div class="team-role">TREASURER &amp; FINANCE IN-CHARGE</div><div class="team-name">Zohaib Azeem</div><div class="team-desc">Responsible for collecting and keeping the picnic funds</div></div>
       </article>
     </div>
   </section>
@@ -190,6 +199,12 @@ tbody tr:hover{background:#f2faff}
     <button class="btn" id="saveSettings">Save Collection Amounts</button>
   </div>
   <div class="admin-section"><h3>Change Header Background</h3><input class="field" id="backgroundFile" type="file" accept="image/*"><button class="btn" id="uploadBackground">Upload Background</button><p class="small">Choose a photo from your phone gallery. A dark overlay keeps the school name readable.</p></div>
+  <div class="admin-section"><h3>Management Team Profile Photos</h3>
+    <p class="small">Choose a separate photo for each team member. Photos will appear as small round DPs beside their names.</p>
+    <label class="small">Masab Zahid — Picnic In-charge</label><input class="field" id="teamMasabFile" type="file" accept="image/*"><button class="btn" id="uploadTeamMasab">Upload Masab's DP</button>
+    <label class="small" style="display:block;margin-top:13px">Waqas Saeed — Picnic In-charge</label><input class="field" id="teamWaqasFile" type="file" accept="image/*"><button class="btn" id="uploadTeamWaqas">Upload Waqas's DP</button>
+    <label class="small" style="display:block;margin-top:13px">Zohaib Azeem — Treasurer</label><input class="field" id="teamZohaibFile" type="file" accept="image/*"><button class="btn" id="uploadTeamZohaib">Upload Zohaib's DP</button>
+  </div>
   <div class="admin-section"><h3>Edit Student Payment</h3><select class="field" id="editStudent"><option value="">Select student</option></select>
     <input class="field" id="editName" placeholder="Student name"><input class="field" id="editPaid" type="number" min="0" placeholder="Paid amount (Rs.)">
     <div class="btn-row"><button class="btn" id="saveStudent">Save Student</button><button class="btn danger" id="deleteStudent">Delete Student</button></div>
@@ -204,7 +219,7 @@ const ADMIN_UID = "0a0b923e-6aac-4afa-a759-97051348515b";
 const FEE = 1500;
 const BUCKET = "picnic-gallery";
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-let students = [], settings = {manual_collection:0, school_contribution:0, background_image:""}, isAdmin = false;
+let students = [], settings = {manual_collection:0, school_contribution:0, background_image:"", team_masab_image:"", team_waqas_image:"", team_zohaib_image:""}, isAdmin = false;
 
 const money = n => "Rs. " + Math.round(Number(n)||0).toLocaleString("en-PK");
 const el = id => document.getElementById(id);
@@ -217,11 +232,19 @@ async function loadSettings(){
   const {data,error}=await db.from("picnic_settings").select("*").eq("id",1).maybeSingle();
   if(!error && data){settings={...settings,...data};}
   if(settings.background_image) applyBackground(settings.background_image);
+  applyTeamPhoto("Masab",settings.team_masab_image);
+  applyTeamPhoto("Waqas",settings.team_waqas_image);
+  applyTeamPhoto("Zohaib",settings.team_zohaib_image);
   el("manualCollection").value=settings.manual_collection||0;
   el("schoolContribution").value=settings.school_contribution||0;
 }
 function applyBackground(url){
   el("hero").style.backgroundImage=`linear-gradient(135deg,rgba(5,31,54,.48),rgba(0,105,135,.36)),url("${url}")`;
+}
+function applyTeamPhoto(person,url){
+  const avatar=el("teamAvatar"+person);
+  if(!avatar)return;
+  if(url){avatar.innerHTML=`<img src="${escapeHtml(url)}" alt="${person} profile photo">`;}
 }
 async function loadStudents(){
   const {data,error}=await db.from("students").select("id,name,paid_amount").order("name");
@@ -302,6 +325,29 @@ el("uploadBackground").onclick=async()=>{
   if(saveError){message("adminMsg","Image uploaded, but saving its URL failed: "+saveError.message,true);return;}
   settings.background_image=url;applyBackground(url);message("adminMsg","Header background updated successfully.");
 };
+
+
+async function uploadTeamPhoto(person,fileInputId,settingColumn){
+  if(!isAdmin)return;
+  const file=el(fileInputId).files[0];
+  if(!file){message("adminMsg","Please choose a profile photo first.",true);return;}
+  if(!file.type.startsWith("image/")){message("adminMsg","Please choose an image file.",true);return;}
+  if(file.size>5*1024*1024){message("adminMsg","Please choose an image smaller than 5 MB.",true);return;}
+  const ext=(file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
+  const path=`team/${person.toLowerCase()}-${Date.now()}.${ext}`;
+  const {error:uploadError}=await db.storage.from(BUCKET).upload(path,file,{upsert:true,contentType:file.type});
+  if(uploadError){message("adminMsg",uploadError.message,true);return;}
+  const {data}=db.storage.from(BUCKET).getPublicUrl(path);
+  const url=data.publicUrl;
+  const {error:saveError}=await db.from("picnic_settings").upsert({id:1,[settingColumn]:url},{onConflict:"id"});
+  if(saveError){message("adminMsg","Photo uploaded, but saving its URL failed: "+saveError.message,true);return;}
+  settings[settingColumn]=url;
+  applyTeamPhoto(person,url);
+  message("adminMsg",person+" profile photo updated successfully.");
+}
+el("uploadTeamMasab").onclick=()=>uploadTeamPhoto("Masab","teamMasabFile","team_masab_image");
+el("uploadTeamWaqas").onclick=()=>uploadTeamPhoto("Waqas","teamWaqasFile","team_waqas_image");
+el("uploadTeamZohaib").onclick=()=>uploadTeamPhoto("Zohaib","teamZohaibFile","team_zohaib_image");
 
 function updateCountdown(){
   const deadline = new Date("2026-11-14T23:59:59+05:00").getTime();
