@@ -4,134 +4,314 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Class 10th Picnic 2026</title>
+<title>Class 10 Picnic 2026</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 *{box-sizing:border-box}
+
+:root{
+ --blue:#123c60;
+ --cyan:#00a6c7;
+ --green:#15945c;
+ --bg:#eef3f8;
+}
+
 body{
- margin:0;background:#f1f5f9;color:#172033;
- font-family:Arial,sans-serif
+ margin:0;
+ background:var(--bg);
+ color:#172033;
+ font-family:Arial,sans-serif;
 }
-header{
- background:#153c59;color:white;text-align:center;
- padding:30px 12px
+
+.hero{
+ min-height:300px;
+ padding:55px 15px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ color:white;
+ position:relative;
+ background:linear-gradient(135deg,#102c46,#087b9b);
+ background-position:center;
+ background-size:cover;
+ border-radius:0 0 28px 28px;
 }
-header h1{font-size:24px;margin:0 0 10px}
-header p{margin:6px}
-.fee{font-size:32px;font-weight:bold;margin-top:15px}
-.container{max-width:1000px;margin:22px auto;padding:0 12px}
+
+.hero:before{
+ content:"";
+ position:absolute;
+ inset:0;
+ background:linear-gradient(135deg,#071e35c9,#087b9b99);
+ border-radius:inherit;
+}
+
+.hero-content{position:relative;z-index:1}
+
+.hero h1{
+ font-size:30px;
+ margin:0 0 12px;
+}
+
+.hero p{color:#e1f4ff}
+
+.fee{
+ font-size:36px;
+ font-weight:bold;
+ margin:18px 0 5px;
+}
+
+.container{
+ max-width:1050px;
+ margin:25px auto;
+ padding:0 13px;
+}
+
+.section{
+ background:white;
+ border-radius:17px;
+ padding:19px;
+ margin-bottom:19px;
+ box-shadow:0 5px 24px #193b5b12;
+}
+
+.heading{
+ font-size:21px;
+ font-weight:bold;
+ margin:0 0 15px;
+ color:var(--blue);
+}
+
 .stats{
- display:grid;grid-template-columns:repeat(3,1fr);gap:10px
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:12px;
 }
-.stat,.panel{
- background:white;padding:16px;border-radius:12px;
- box-shadow:0 2px 9px #0000000c
+
+.stat{
+ background:white;
+ border-radius:14px;
+ padding:17px 8px;
+ text-align:center;
+ box-shadow:0 4px 15px #193b5b0c;
+ border-bottom:3px solid var(--cyan);
 }
-.stat{text-align:center}
-.stat strong{display:block;font-size:22px;margin-bottom:6px}
-.stat span{font-size:12px;color:#64748b}
-.panel{margin-top:17px}
-h2{font-size:19px}
+
+.stat strong{
+ display:block;
+ font-size:22px;
+ color:var(--blue);
+ margin-bottom:7px;
+}
+
+.stat span{
+ font-size:12px;
+ color:#64748b;
+}
+
+.fund-card{
+ background:linear-gradient(135deg,#123c60,#087e9d);
+ color:white;
+ border-radius:17px;
+ padding:22px;
+ margin-top:18px;
+}
+
+.fund-card h2{margin:0 0 15px;font-size:19px}
+.fund-card strong{font-size:29px}
+.fund-card p{font-size:13px;color:#dcecf5}
+
 input,textarea{
- width:100%;padding:11px;margin:5px 0;
- border:1px solid #cbd5e1;border-radius:7px;
- font-size:14px
+ width:100%;
+ padding:12px;
+ border:1px solid #d9e2ec;
+ border-radius:9px;
+ margin:6px 0;
+ font-size:14px;
 }
-textarea{min-height:150px;resize:vertical}
+
 button{
- padding:10px;border:0;border-radius:7px;
- background:#153c59;color:white;font-weight:bold;
- cursor:pointer
+ border:0;
+ padding:11px 15px;
+ border-radius:9px;
+ background:var(--blue);
+ color:white;
+ font-weight:bold;
+ cursor:pointer;
 }
+
+button:disabled{opacity:.6}
 .full{width:100%;margin:6px 0}
-.danger{background:#dc3545}
+.green{background:var(--green)}
+.red{background:#dc3545}
 .grey{background:#64748b}
-.green{background:#16834a}
+
 .table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:520px}
+
+table{
+ width:100%;
+ border-collapse:collapse;
+ min-width:510px;
+}
+
 th,td{
- padding:11px 8px;text-align:left;
- border-bottom:1px solid #e2e8f0;font-size:13px
+ padding:13px 9px;
+ border-bottom:1px solid #e8edf3;
+ text-align:left;
+ font-size:13px;
 }
-th{background:#f8fafc}
-.paid{color:#15803d;font-weight:bold}
-.partial{color:#b45309;font-weight:bold}
-.unpaid{color:#dc2626;font-weight:bold}
-.admin-table input{
- width:95px;padding:9px;margin:0
+
+th{background:#f3f7fb;color:#42566a}
+
+.name-tag{
+ display:inline-block;
+ padding:8px 11px;
+ background:#e4f3fb;
+ color:#10577a;
+ border-radius:8px;
+ font-weight:bold;
 }
-.admin-table button{padding:9px;font-size:12px}
+
+.paid{color:#16834a;font-weight:bold}
+.partial{color:#b7791f;font-weight:bold}
+.unpaid{color:#dc3545;font-weight:bold}
+
+.admin-table input{width:105px}
+
 .small{font-size:12px;color:#64748b}
+
 #adminPanel{display:none}
-#message{font-size:13px;overflow-wrap:anywhere}
-footer{text-align:center;padding:20px;color:#64748b;font-size:12px}
-.lock-area{text-align:center;padding:12px 0 22px}
-.lock-button{
- width:38px;height:38px;border-radius:50%;
- background:#e2e8f0;color:#334155;font-size:18px;
- padding:0
+
+#loginModal{
+ display:none;
+ position:fixed;
+ inset:0;
+ background:#0009;
+ z-index:20;
+ align-items:center;
+ justify-content:center;
+ padding:15px;
 }
-.modal{
- display:none;position:fixed;inset:0;background:#0009;
- z-index:10;align-items:center;justify-content:center;padding:15px
-}
+
 .modal-box{
- background:white;width:100%;max-width:380px;
- padding:22px;border-radius:14px
+ background:white;
+ padding:24px;
+ width:100%;
+ max-width:380px;
+ border-radius:16px;
 }
-.close{width:100%;background:#64748b;margin-top:7px}
-@media(max-width:550px){
+
+.lock-area{
+ text-align:center;
+ padding:12px 0 25px;
+}
+
+.lock-button{
+ width:38px;
+ height:38px;
+ padding:0;
+ border-radius:50%;
+ background:#dce8ef;
+ color:#123c60;
+ font-size:18px;
+}
+
+.preview{
+ width:100%;
+ max-height:220px;
+ object-fit:cover;
+ border-radius:12px;
+ display:none;
+ margin:10px 0;
+}
+
+.message{
+ font-size:13px;
+ overflow-wrap:anywhere;
+}
+
+footer{
+ text-align:center;
+ padding:20px;
+ color:#64748b;
+ font-size:12px;
+}
+
+@media(max-width:600px){
  .stats{grid-template-columns:repeat(2,1fr)}
- header h1{font-size:21px}
+ .hero h1{font-size:23px}
+ .section{padding:14px}
 }
 </style>
 </head>
 
 <body>
 
-<header>
- <h1>CLASS 10TH PICNIC 2026</h1>
- <p>MAYMAR-E-NAU SCHOOL</p>
- <p>PICNIC FEE COLLECTION</p>
- <div class="fee">Rs. 1,500</div>
- <p>Fee Per Student</p>
+<!-- WEBSITE HERO / BACKGROUND -->
+<header class="hero" id="hero">
+ <div class="hero-content">
+  <h1>CLASS 10TH PICNIC 2026</h1>
+  <p>MAYMAR-E-NAU SCHOOL</p>
+  <p>OUR CLASS • OUR MEMORIES • OUR PICNIC</p>
+  <div class="fee">Rs. 1,500</div>
+  <p>Picnic Fee Per Student</p>
+ </div>
 </header>
 
 <div class="container">
 
+ <!-- STUDENT STATISTICS -->
  <div class="stats">
+
   <div class="stat">
    <strong id="totalStudents">0</strong>
    <span>Total Students</span>
   </div>
+
   <div class="stat">
    <strong id="paidStudents">0</strong>
    <span>Fully Paid</span>
   </div>
+
   <div class="stat">
    <strong id="pendingStudents">0</strong>
-   <span>Not Fully Paid</span>
+   <span>Pending Students</span>
   </div>
+
   <div class="stat">
    <strong id="totalCollection">Rs. 0</strong>
-   <span>Total Collection</span>
+   <span>Student Payments</span>
   </div>
+
   <div class="stat">
    <strong id="remaining">Rs. 0</strong>
-   <span>Remaining Amount</span>
+   <span>Student Remaining</span>
   </div>
+
   <div class="stat">
    <strong id="partialStudents">0</strong>
    <span>Partial Payments</span>
   </div>
+
+ </div>
+
+ <!-- TOTAL FUNDS -->
+ <div class="fund-card">
+  <h2>💰 Total Picnic Funds</h2>
+  <strong id="grandTotal">Rs. 0</strong>
+  <p>Student Payments + Manual Collection + School Contribution</p>
  </div>
 
  <!-- PUBLIC STUDENT LIST -->
- <div class="panel">
-  <h2>Student Payment List</h2>
-  <input id="search" placeholder="Search student name..."
-   oninput="renderPublicList()">
+ <div class="section" style="margin-top:20px">
+
+  <h2 class="heading">🎓 Student Payment Records</h2>
+
+  <input id="search"
+   placeholder="Search student name..."
+   oninput="renderPublic()">
 
   <div class="table-wrap">
    <table>
@@ -143,25 +323,76 @@ footer{text-align:center;padding:20px;color:#64748b;font-size:12px}
       <th>Status</th>
      </tr>
     </thead>
-    <tbody id="publicList">
-     <tr><td colspan="4">Loading...</td></tr>
-    </tbody>
+    <tbody id="publicList"></tbody>
    </table>
   </div>
+
  </div>
 
- <!-- ADMIN PANEL -->
- <div class="panel" id="adminPanel">
+ <!-- ADMIN DASHBOARD -->
+ <div class="section" id="adminPanel">
 
-  <h2>Admin Dashboard</h2>
+  <h2 class="heading">⚙️ Admin Dashboard</h2>
 
-  <h3>Add Multiple Students</h3>
+  <!-- BACKGROUND IMAGE -->
+  <h3>🖼️ Website Background Image</h3>
+
   <p class="small">
-   Paste all student names below. Write one name per line.
+   Mobile gallery se image select karein aur website ka background change karein.
+  </p>
+
+  <input type="file" id="backgroundFile" accept="image/*">
+
+  <img id="backgroundPreview" class="preview">
+
+  <button class="full green" id="backgroundButton"
+   onclick="uploadBackground()">
+   Upload Website Background
+  </button>
+
+  <p id="backgroundMessage" class="message"></p>
+
+  <hr>
+
+  <!-- MANUAL COLLECTION -->
+  <h3>💵 Manual Collection</h3>
+
+  <p class="small">
+   Admin yahan extra collected amount manually enter kar sakta hai.
+  </p>
+
+  <input type="number" id="manualAmount"
+   min="0" placeholder="Manual Collection Amount">
+
+  <hr>
+
+  <!-- SCHOOL CONTRIBUTION -->
+  <h3>🏫 School Contribution</h3>
+
+  <p class="small">
+   School ki taraf se milne wali total amount yahan enter karein.
+  </p>
+
+  <input type="number" id="schoolAmount"
+   min="0" placeholder="School Contribution Amount">
+
+  <button class="full green" onclick="saveFunds()">
+   Save All Fund Details
+  </button>
+
+  <p class="message" id="fundMessage"></p>
+
+  <hr>
+
+  <!-- BULK STUDENTS -->
+  <h3>👨‍🎓 Add Multiple Students</h3>
+
+  <p class="small">
+   Saare student names ek saath paste karein. Har line mein ek naam.
   </p>
 
   <textarea id="bulkNames"
-   placeholder="Ali&#10;Ahmed&#10;Usman&#10;Hamza&#10;More student names..."></textarea>
+   placeholder="Ali&#10;Ahmed&#10;Usman&#10;Hamza&#10;More students..."></textarea>
 
   <button class="full green" onclick="bulkAdd()">
    + Add All Students
@@ -169,14 +400,12 @@ footer{text-align:center;padding:20px;color:#64748b;font-size:12px}
 
   <hr>
 
-  <h3>Student Payment Management</h3>
-  <p class="small">
-   Enter payment directly in front of each student and press Save.
-  </p>
+  <!-- PAYMENT MANAGEMENT -->
+  <h3>💰 Student Payment Management</h3>
 
   <input id="adminSearch"
    placeholder="Search student..."
-   oninput="renderAdminList()">
+   oninput="renderAdmin()">
 
   <div class="table-wrap">
    <table class="admin-table">
@@ -184,8 +413,8 @@ footer{text-align:center;padding:20px;color:#64748b;font-size:12px}
      <tr>
       <th>#</th>
       <th>Student Name</th>
-      <th>Payment (Rs.)</th>
-      <th>Action</th>
+      <th>Payment</th>
+      <th>Save</th>
       <th>Delete</th>
      </tr>
     </thead>
@@ -193,44 +422,53 @@ footer{text-align:center;padding:20px;color:#64748b;font-size:12px}
    </table>
   </div>
 
-  <p class="small">Fee per student: Rs. 1,500</p>
-
   <button class="full grey" onclick="logout()">Logout Admin</button>
-  <p id="message"></p>
+
+  <p id="message" class="message"></p>
 
  </div>
 
 </div>
 
 <footer>
- Class 10th Picnic 2026 | Maymar-e-Nau School
+ Class 10th Picnic 2026<br>
+ Maymar-E-Nau School
 </footer>
 
-<!-- HIDDEN LOCK -->
+<!-- HIDDEN ADMIN LOGIN -->
 <div class="lock-area">
  <button class="lock-button" onclick="openLogin()">🔒</button>
 </div>
 
-<!-- LOGIN POPUP -->
-<div class="modal" id="loginModal">
+<div id="loginModal">
  <div class="modal-box">
-  <h2>Admin Login</h2>
+
+  <h2>🔐 Admin Login</h2>
   <p class="small">Authorized Admin Only</p>
 
-  <form onsubmit="event.preventDefault();login();">
-   <input type="email" id="email" placeholder="Admin Email" required>
-   <input type="password" id="password" placeholder="Password" required>
-   <button class="full" type="submit">Login</button>
+  <form onsubmit="event.preventDefault();login()">
+
+   <input type="email" id="email"
+    placeholder="Admin Email" required>
+
+   <input type="password" id="password"
+    placeholder="Admin Password" required>
+
+   <button class="full">Login</button>
+
   </form>
 
-  <button class="close" onclick="closeLogin()">Cancel</button>
-  <p id="loginMessage"></p>
+  <button class="full grey" onclick="closeLogin()">Cancel</button>
+
+  <p id="loginMessage" class="message"></p>
+
  </div>
 </div>
 
 <script>
 
 // SUPABASE CONFIGURATION
+
 const SUPABASE_URL =
 "https://ycjnzxkycbriqkeunvez.supabase.co";
 
@@ -240,113 +478,55 @@ const SUPABASE_KEY =
 const ADMIN_UID =
 "0a0b923e-6aac-4afa-a759-97051348515b";
 
+const BUCKET="picnic-gallery";
+
 const db=window.supabase.createClient(
  SUPABASE_URL,SUPABASE_KEY
 );
 
 let students=[];
+let settings={
+ manual_collection:0,
+ school_contribution:0,
+ background_path:""
+};
+
 let isAdmin=false;
 
-// MESSAGE
+
+// HELPERS
+
 function msg(t){
  document.getElementById("message").textContent=t;
 }
 
-// LOGIN POPUP
-function openLogin(){
- document.getElementById("loginModal").style.display="flex";
-}
-function closeLogin(){
- document.getElementById("loginModal").style.display="none";
+function formatMoney(n){
+ return "Rs. "+Number(n||0).toLocaleString("en-PK");
 }
 
-// PAYMENT STATUS
 function getStatus(amount){
  if(amount>=1500)return "Paid";
  if(amount>0)return "Partial";
  return "Unpaid";
 }
 
-// LOAD STUDENTS
-async function loadStudents(){
- const {data,error}=await db
-  .from("students")
-  .select("*")
-  .order("name");
 
- if(error){
-  if(isAdmin)msg(error.message);
-  return;
- }
+// LOGIN
 
- students=data||[];
- updateStats();
- renderPublicList();
-
- if(isAdmin)renderAdminList();
+function openLogin(){
+ document.getElementById("loginModal").style.display="flex";
 }
 
-// STATISTICS
-function updateStats(){
- const total=students.length;
- const paid=students.filter(s=>s.paid_amount>=1500).length;
- const partial=students.filter(s=>s.paid_amount>0&&s.paid_amount<1500).length;
- const collection=students.reduce((a,s)=>a+s.paid_amount,0);
-
- document.getElementById("totalStudents").textContent=total;
- document.getElementById("paidStudents").textContent=paid;
- document.getElementById("pendingStudents").textContent=total-paid;
- document.getElementById("partialStudents").textContent=partial;
-
- document.getElementById("totalCollection").textContent=
-  "Rs. "+collection.toLocaleString();
-
- document.getElementById("remaining").textContent=
-  "Rs. "+Math.max(0,total*1500-collection).toLocaleString();
+function closeLogin(){
+ document.getElementById("loginModal").style.display="none";
 }
 
-// PUBLIC LIST
-function renderPublicList(){
- const list=document.getElementById("publicList");
- const search=document.getElementById("search").value.toLowerCase();
-
- list.replaceChildren();
-
- const filtered=students.filter(s=>
-  s.name.toLowerCase().includes(search)
- );
-
- filtered.forEach((s,i)=>{
-  const tr=document.createElement("tr");
-  const status=getStatus(s.paid_amount);
-
-  [i+1,s.name,"Rs. "+s.paid_amount.toLocaleString(),status]
-   .forEach((v,index)=>{
-    const td=document.createElement("td");
-    td.textContent=v;
-    if(index===3)td.className=status.toLowerCase();
-    tr.appendChild(td);
-   });
-
-  list.appendChild(tr);
- });
-
- if(!filtered.length){
-  const tr=document.createElement("tr");
-  const td=document.createElement("td");
-  td.colSpan=4;
-  td.textContent="No students found.";
-  tr.appendChild(td);
-  list.appendChild(tr);
- }
-}
-
-// ADMIN LOGIN
 async function login(){
+
  const email=document.getElementById("email").value.trim();
  const password=document.getElementById("password").value;
- const out=document.getElementById("loginMessage");
 
+ const out=document.getElementById("loginMessage");
  out.textContent="Checking login...";
 
  const {data,error}=await db.auth.signInWithPassword({
@@ -354,7 +534,7 @@ async function login(){
  });
 
  if(error){
-  out.textContent="Login failed: "+error.message;
+  out.textContent=error.message;
   return;
  }
 
@@ -365,70 +545,119 @@ async function login(){
  }
 
  isAdmin=true;
+
  closeLogin();
 
  document.getElementById("password").value="";
  document.getElementById("adminPanel").style.display="block";
 
  await loadStudents();
+ await loadSettings();
 
  document.getElementById("adminPanel").scrollIntoView({
   behavior:"smooth"
  });
 }
 
-// BULK ADD
-async function bulkAdd(){
- if(!isAdmin)return;
 
- const input=document.getElementById("bulkNames");
+// LOAD STUDENTS
 
- const names=input.value.split(/\r?\n/)
-  .map(n=>n.trim())
-  .filter(n=>n.length>0);
+async function loadStudents(){
 
- if(!names.length){
-  msg("Please paste student names.");
-  return;
- }
-
- const existing=new Set(
-  students.map(s=>s.name.trim().toLowerCase())
- );
-
- const unique=[];
- const seen=new Set(existing);
-
- names.forEach(name=>{
-  const key=name.toLowerCase();
-  if(!seen.has(key)){
-   seen.add(key);
-   unique.push({name:name,paid_amount:0});
-  }
- });
-
- if(!unique.length){
-  msg("These students are already added.");
-  return;
- }
-
- const {error}=await db.from("students").insert(unique);
+ const {data,error}=await db
+  .from("students")
+  .select("*")
+  .order("name");
 
  if(error){
-  msg("Add error: "+error.message);
+  msg(error.message);
   return;
  }
 
- input.value="";
- msg(unique.length+" students added successfully!");
+ students=data||[];
 
- await loadStudents();
+ updateStats();
+ renderPublic();
+
+ if(isAdmin)renderAdmin();
 }
 
-// ADMIN PAYMENT TABLE
-function renderAdminList(){
- const list=document.getElementById("adminList");
- const search=document.getElementById("adminSearch").value.toLowerCase();
+
+// LOAD SETTINGS
+
+async function loadSettings(){
+
+ const {data,error}=await db
+  .from("picnic_settings")
+  .select("*")
+  .eq("id",1)
+  .maybeSingle();
+
+ if(error){
+  document.getElementById("fundMessage").textContent=error.message;
+  return;
+ }
+
+ if(data){
+  settings=data;
+
+  document.getElementById("manualAmount").value=
+   data.manual_collection||0;
+
+  document.getElementById("schoolAmount").value=
+   data.school_contribution||0;
+
+  if(data.background_path){
+   applyBackground(data.background_path);
+  }
+ }
+
+ updateStats();
+}
+
+
+// UPDATE TOTAL FUNDS
+
+function updateStats(){
+
+ const total=students.length;
+
+ const paid=students.filter(
+  s=>Number(s.paid_amount)>=1500
+ ).length;
+
+ const partial=students.filter(
+  s=>Number(s.paid_amount)>0&&Number(s.paid_amount)<1500
+ ).length;
+
+ const collection=students.reduce(
+  (sum,s)=>sum+Number(s.paid_amount||0),0
+ );
+
+ const remaining=Math.max(0,total*1500-collection);
+
+ const manual=Number(settings.manual_collection||0);
+ const school=Number(settings.school_contribution||0);
+
+ const grandTotal=collection+manual+school;
+
+ document.getElementById("totalStudents").textContent=total;
+ document.getElementById("paidStudents").textContent=paid;
+ document.getElementById("pendingStudents").textContent=total-paid;
+ document.getElementById("partialStudents").textContent=partial;
+
+ document.getElementById("totalCollection").textContent=formatMoney(collection);
+ document.getElementById("remaining").textContent=formatMoney(remaining);
+ document.getElementById("grandTotal").textContent=formatMoney(grandTotal);
+}
+
+
+// PUBLIC STUDENT LIST
+
+function renderPublic(){
+
+ const list=document.getElementById("publicList");
+ const search=document.getElementById("search").value.toLowerCase();
 
  list.replaceChildren();
 
@@ -437,74 +666,204 @@ function renderAdminList(){
  );
 
  filtered.forEach((s,i)=>{
+
   const tr=document.createElement("tr");
+  const st=getStatus(Number(s.paid_amount||0));
 
-  // Number
-  const number=document.createElement("td");
-  number.textContent=i+1;
+  const values=[
+   i+1,
+   s.name,
+   formatMoney(s.paid_amount),
+   st
+  ];
 
-  // Student name input
-  const nameCell=document.createElement("td");
-  const nameInput=document.createElement("input");
-  nameInput.value=s.name;
-  nameInput.setAttribute("aria-label","Student name");
-  nameCell.appendChild(nameInput);
+  values.forEach((v,j)=>{
 
-  // Payment input
-  const payCell=document.createElement("td");
-  const payInput=document.createElement("input");
-  payInput.type="number";
-  payInput.min="0";
-  payInput.max="1500";
-  payInput.step="1";
-  payInput.value=s.paid_amount;
-  payInput.setAttribute("aria-label","Payment amount");
-  payCell.appendChild(payInput);
+   const td=document.createElement("td");
 
-  // Save button
-  const actionCell=document.createElement("td");
-  const save=document.createElement("button");
-  save.className="green";
-  save.textContent="Save";
-  save.onclick=()=>saveStudent(s.id,nameInput.value,payInput.value);
-  actionCell.appendChild(save);
+   if(j===1){
+    const span=document.createElement("span");
+    span.className="name-tag";
+    span.textContent=v;
+    td.appendChild(span);
+   }else{
+    td.textContent=v;
+   }
 
-  // Delete button
-  const deleteCell=document.createElement("td");
-  const del=document.createElement("button");
-  del.className="danger";
-  del.textContent="Delete";
-  del.onclick=()=>deleteStudent(s.id);
-  deleteCell.appendChild(del);
+   if(j===3)td.className=st.toLowerCase();
 
-  tr.append(number,nameCell,payCell,actionCell,deleteCell);
+   tr.appendChild(td);
+
+  });
+
   list.appendChild(tr);
+
  });
 
  if(!filtered.length){
   const tr=document.createElement("tr");
   const td=document.createElement("td");
-  td.colSpan=5;
+  td.colSpan=4;
   td.textContent="No students found.";
   tr.appendChild(td);
   list.appendChild(tr);
  }
+
 }
 
-// SAVE NAME AND PAYMENT
-async function saveStudent(id,name,value){
+
+// SAVE MANUAL FUNDS
+
+async function saveFunds(){
+
  if(!isAdmin)return;
 
- name=name.trim();
- const amount=Number(value);
+ const manual=Number(document.getElementById("manualAmount").value);
+ const school=Number(document.getElementById("schoolAmount").value);
 
- if(!name){
-  msg("Student name is required.");
+ if(!Number.isFinite(manual)||!Number.isFinite(school)||
+    manual<0||school<0){
+  document.getElementById("fundMessage").textContent=
+   "Please enter valid amounts.";
   return;
  }
 
- if(!Number.isInteger(amount)||amount<0||amount>1500){
-  msg("Payment must be between Rs. 0 and Rs. 1,500.");
+ const {error}=await db.from("picnic_settings").upsert({
+  id:1,
+  manual_collection:manual,
+  school_contribution:school,
+  background_path:settings.background_path||""
+ });
+
+ if(error){
+  document.getElementById("fundMessage").textContent=error.message;
+  return;
+ }
+
+ settings.manual_collection=manual;
+ settings.school_contribution=school;
+
+ updateStats();
+
+ document.getElementById("fundMessage").textContent=
+  "Fund details saved successfully!";
+}
+
+
+// ADD MULTIPLE STUDENTS
+
+async function bulkAdd(){
+
+ if(!isAdmin)return;
+
+ const input=document.getElementById("bulkNames");
+
+ const names=input.value.split(/\r?\n/)
+  .map(n=>n.trim()).filter(Boolean);
+
+ if(!names.length){
+  msg("Please enter student names.");
+  return;
+ }
+
+ const existing=new Set(
+  students.map(s=>s.name.trim().toLowerCase())
+ );
+
+ const seen=new Set(existing);
+ const rows=[];
+
+ names.forEach(name=>{
+  if(!seen.has(name.toLowerCase())){
+   seen.add(name.toLowerCase());
+   rows.push({name:name,paid_amount:0});
+  }
+ });
+
+ if(!rows.length){
+  msg("All names already exist.");
+  return;
+ }
+
+ const {error}=await db.from("students").insert(rows);
+
+ if(error){
+  msg(error.message);
+  return;
+ }
+
+ input.value="";
+ msg(rows.length+" students added successfully!");
+
+ await loadStudents();
+}
+
+
+// ADMIN PAYMENT TABLE
+
+function renderAdmin(){
+
+ const list=document.getElementById("adminList");
+ const search=document.getElementById("adminSearch").value.toLowerCase();
+
+ list.replaceChildren();
+
+ students.filter(s=>
+  s.name.toLowerCase().includes(search)
+ ).forEach((s,i)=>{
+
+  const tr=document.createElement("tr");
+
+  const number=document.createElement("td");
+  number.textContent=i+1;
+
+  const nameCell=document.createElement("td");
+  const name=document.createElement("input");
+  name.value=s.name;
+  nameCell.appendChild(name);
+
+  const amountCell=document.createElement("td");
+  const amount=document.createElement("input");
+  amount.type="number";
+  amount.min="0";
+  amount.max="1500";
+  amount.step="1";
+  amount.value=s.paid_amount||0;
+  amountCell.appendChild(amount);
+
+  const saveCell=document.createElement("td");
+  const save=document.createElement("button");
+  save.className="green";
+  save.textContent="Save";
+  save.onclick=()=>saveStudent(s.id,name.value,amount.value);
+  saveCell.appendChild(save);
+
+  const deleteCell=document.createElement("td");
+  const del=document.createElement("button");
+  del.className="red";
+  del.textContent="Delete";
+  del.onclick=()=>deleteStudent(s.id);
+  deleteCell.appendChild(del);
+
+  tr.append(number,nameCell,amountCell,saveCell,deleteCell);
+  list.appendChild(tr);
+
+ });
+
+}
+
+
+// SAVE STUDENT PAYMENT
+
+async function saveStudent(id,name,amount){
+
+ if(!isAdmin)return;
+
+ name=name.trim();
+ amount=Number(amount);
+
+ if(!name||!Number.isInteger(amount)||amount<0||amount>1500){
+  msg("Enter a valid name and payment between 0 and 1500.");
   return;
  }
 
@@ -516,48 +875,166 @@ async function saveStudent(id,name,value){
   .eq("id",id);
 
  if(error){
-  msg("Save failed: "+error.message);
+  msg(error.message);
   return;
  }
 
- msg("Payment saved successfully!");
+ msg("Student payment saved!");
+
  await loadStudents();
 }
 
+
 // DELETE STUDENT
+
 async function deleteStudent(id){
+
  if(!isAdmin)return;
 
- if(!confirm("Delete this student?"))return;
+ if(!confirm("Are you sure you want to delete this student?"))return;
 
  const {error}=await db.from("students")
   .delete()
   .eq("id",id);
 
  if(error){
-  msg("Delete failed: "+error.message);
+  msg(error.message);
   return;
  }
 
- msg("Student deleted.");
+ msg("Student deleted successfully!");
+
  await loadStudents();
 }
 
+
+// BACKGROUND IMAGE PREVIEW
+
+document.getElementById("backgroundFile")
+.addEventListener("change",function(){
+
+ const file=this.files[0];
+ const preview=document.getElementById("backgroundPreview");
+
+ if(!file)return;
+
+ if(!file.type.startsWith("image/")||file.size>5*1024*1024){
+  document.getElementById("backgroundMessage").textContent=
+   "Select an image up to 5 MB.";
+  this.value="";
+  return;
+ }
+
+ preview.src=URL.createObjectURL(file);
+ preview.style.display="block";
+
+});
+
+
+// UPLOAD BACKGROUND
+
+async function uploadBackground(){
+
+ if(!isAdmin)return;
+
+ const input=document.getElementById("backgroundFile");
+ const file=input.files[0];
+
+ const output=document.getElementById("backgroundMessage");
+ const button=document.getElementById("backgroundButton");
+
+ if(!file){
+  output.textContent="Please select an image.";
+  return;
+ }
+
+ if(!file.type.startsWith("image/")||file.size>5*1024*1024){
+  output.textContent="Image must be 5 MB or smaller.";
+  return;
+ }
+
+ button.disabled=true;
+ output.textContent="Uploading background...";
+
+ const path="background/"+Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+
+ const {error:uploadError}=await db.storage
+  .from(BUCKET)
+  .upload(path,file,{
+   cacheControl:"3600",
+   upsert:false,
+   contentType:file.type
+  });
+
+ if(uploadError){
+  button.disabled=false;
+  output.textContent=uploadError.message;
+  return;
+ }
+
+ const {error:saveError}=await db.from("picnic_settings")
+  .upsert({
+   id:1,
+   manual_collection:Number(settings.manual_collection||0),
+   school_contribution:Number(settings.school_contribution||0),
+   background_path:path
+  });
+
+ button.disabled=false;
+
+ if(saveError){
+  output.textContent="Image uploaded, but settings could not save: "+saveError.message;
+  return;
+ }
+
+ settings.background_path=path;
+
+ applyBackground(path);
+
+ input.value="";
+ document.getElementById("backgroundPreview").style.display="none";
+
+ output.textContent="Website background updated successfully!";
+}
+
+
+// APPLY BACKGROUND IMAGE
+
+function applyBackground(path){
+
+ const {data}=db.storage.from(BUCKET).getPublicUrl(path);
+
+ const hero=document.getElementById("hero");
+
+ hero.style.backgroundImage=
+  "linear-gradient(135deg,#071e35a8,#087b9b80),url('"+
+  data.publicUrl.replace(/'/g,"%27")+"')";
+
+}
+
+
 // LOGOUT
+
 async function logout(){
+
  await db.auth.signOut();
 
  isAdmin=false;
+
  document.getElementById("adminPanel").style.display="none";
  document.getElementById("adminSearch").value="";
  document.getElementById("bulkNames").value="";
 
  msg("");
+
  window.scrollTo({top:0,behavior:"smooth"});
 }
 
-// RESTORE SESSION
+
+// INITIALIZE
+
 async function initialize(){
+
  const {data}=await db.auth.getUser();
 
  if(data.user&&data.user.id===ADMIN_UID){
@@ -566,15 +1043,21 @@ async function initialize(){
  }
 
  await loadStudents();
+ await loadSettings();
 
- // LIVE UPDATES
  db.channel("picnic-live")
-  .on("postgres_changes",{
-   event:"*",
-   schema:"public",
-   table:"students"
-  },()=>loadStudents())
-  .subscribe();
+ .on("postgres_changes",{
+  event:"*",
+  schema:"public",
+  table:"students"
+ },()=>loadStudents())
+ .on("postgres_changes",{
+  event:"*",
+  schema:"public",
+  table:"picnic_settings"
+ },()=>loadSettings())
+ .subscribe();
+
 }
 
 initialize();
